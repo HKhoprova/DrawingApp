@@ -119,48 +119,48 @@ public class mainWindowController {
     public void initialize() {
         g = canvas.getGraphicsContext2D();
         g.setImageSmoothing(false);
-        
+
         toolSizeCircle.radiusProperty().bind(toolSizeSpinner.valueProperty());
         colorPicker.setValue(Color.BLACK);
         currentColorRect.fillProperty().bind(colorPicker.valueProperty());
         clearCanvas();
 
         canvas.setOnMouseClicked(e -> {
-            double size = Double.valueOf(toolSizeSpinner.getValue())*2;
-            double x = e.getX() - size/2;
-            double y = e.getY() - size/2;
+            double size = Double.valueOf(toolSizeSpinner.getValue()) * 2;
+            double x = e.getX() - size / 2;
+            double y = e.getY() - size / 2;
 
-            if(currentTool.equals("bucket")) {
-                    x = e.getX();
-                    y = e.getY();
-                    WritableImage image = canvasToWritableImage(canvas);
-                    PixelReader pixelReader = image.getPixelReader();
-                    Color targetColor = pixelReader.getColor((int) x, (int) y);
-                    Color replacementColor = colorPicker.getValue();
-                    floodFill(image, (int) x, (int) y, targetColor, replacementColor);
-                    g.drawImage(image, 0, 0);
-                    WritableImage currentImage = canvasToWritableImage(canvas);
-                    drawings.add(currentImage);
-                    currentDrawing += 1;
-            } else if(currentTool.equals("eyedropper")) {
-                    Robot robot = new Robot();
-                    Point mousePos = MouseInfo.getPointerInfo().getLocation();
-                    Color color = robot.getPixelColor(mousePos.getX(), mousePos.getY());
-                    colorPicker.setValue(color);
+            if (currentTool.equals("bucket")) {
+                x = e.getX();
+                y = e.getY();
+                WritableImage image = canvasToWritableImage(canvas);
+                PixelReader pixelReader = image.getPixelReader();
+                Color targetColor = pixelReader.getColor((int) x, (int) y);
+                Color replacementColor = colorPicker.getValue();
+                floodFill(image, (int) x, (int) y, targetColor, replacementColor);
+                g.drawImage(image, 0, 0);
+                WritableImage currentImage = canvasToWritableImage(canvas);
+                drawings.add(currentImage);
+                currentDrawing += 1;
+            } else if (currentTool.equals("eyedropper")) {
+                Robot robot = new Robot();
+                Point mousePos = MouseInfo.getPointerInfo().getLocation();
+                Color color = robot.getPixelColor(mousePos.getX(), mousePos.getY());
+                colorPicker.setValue(color);
             }
         });
 
         canvas.setOnMousePressed(e -> {
-            if(currentTool.matches("line|square|squareFilled|circle|circleFilled")) {
+            if (currentTool.matches("line|square|squareFilled|circle|circleFilled")) {
                 startX = e.getX();
                 startY = e.getY();
             }
         });
 
         canvas.setOnMouseDragged(e -> {
-            double size = Double.valueOf(toolSizeSpinner.getValue())*2;
-            double x = e.getX() - size/2;
-            double y = e.getY() - size/2;
+            double size = Double.valueOf(toolSizeSpinner.getValue()) * 2;
+            double x = e.getX() - size / 2;
+            double y = e.getY() - size / 2;
 
             switch (currentTool) {
                 case "pensil":
@@ -187,7 +187,7 @@ public class mainWindowController {
                     g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     g.drawImage(drawings.get(currentDrawing), 0, 0);
                     g.setStroke(colorPicker.getValue());
-                    g.setLineWidth(toolSizeSpinner.getValue()*1.5);
+                    g.setLineWidth(toolSizeSpinner.getValue() * 1.5);
                     g.strokeLine(startX, startY, endX, endY);
                     break;
                 case "square":
@@ -196,12 +196,12 @@ public class mainWindowController {
                     g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     g.drawImage(drawings.get(currentDrawing), 0, 0);
                     g.setStroke(colorPicker.getValue());
-                    g.setLineWidth(toolSizeSpinner.getValue()*1.5);
-                    if(startX <= endX && startY <= endY) {
+                    g.setLineWidth(toolSizeSpinner.getValue() * 1.5);
+                    if (startX <= endX && startY <= endY) {
                         g.strokeRect(startX, startY, endX - startX, endY - startY);
-                    } else if(startX >= endX && startY <= endY) {
+                    } else if (startX >= endX && startY <= endY) {
                         g.strokeRect(endX, startY, startX - endX, endY - startY);
-                    } else if(startX <= endX && startY >= endY) {
+                    } else if (startX <= endX && startY >= endY) {
                         g.strokeRect(startX, endY, endX - startX, startY - endY);
                     } else {
                         g.strokeRect(endX, endY, startX - endX, startY - endY);
@@ -213,11 +213,11 @@ public class mainWindowController {
                     g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     g.drawImage(drawings.get(currentDrawing), 0, 0);
                     g.setFill(colorPicker.getValue());
-                    if(startX <= endX && startY <= endY) {
+                    if (startX <= endX && startY <= endY) {
                         g.fillRect(startX, startY, endX - startX, endY - startY);
-                    } else if(startX >= endX && startY <= endY) {
+                    } else if (startX >= endX && startY <= endY) {
                         g.fillRect(endX, startY, startX - endX, endY - startY);
-                    } else if(startX <= endX && startY >= endY) {
+                    } else if (startX <= endX && startY >= endY) {
                         g.fillRect(startX, endY, endX - startX, startY - endY);
                     } else {
                         g.fillRect(endX, endY, startX - endX, startY - endY);
@@ -229,12 +229,12 @@ public class mainWindowController {
                     g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     g.drawImage(drawings.get(currentDrawing), 0, 0);
                     g.setStroke(colorPicker.getValue());
-                    g.setLineWidth(toolSizeSpinner.getValue()*1.5);
-                    if(startX <= endX && startY <= endY) {
+                    g.setLineWidth(toolSizeSpinner.getValue() * 1.5);
+                    if (startX <= endX && startY <= endY) {
                         g.strokeOval(startX, startY, endX - startX, endY - startY);
-                    } else if(startX >= endX && startY <= endY) {
+                    } else if (startX >= endX && startY <= endY) {
                         g.strokeOval(endX, startY, startX - endX, endY - startY);
-                    } else if(startX <= endX && startY >= endY) {
+                    } else if (startX <= endX && startY >= endY) {
                         g.strokeOval(startX, endY, endX - startX, startY - endY);
                     } else {
                         g.strokeOval(endX, endY, startX - endX, startY - endY);
@@ -246,11 +246,11 @@ public class mainWindowController {
                     g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     g.drawImage(drawings.get(currentDrawing), 0, 0);
                     g.setFill(colorPicker.getValue());
-                    if(startX <= endX && startY <= endY) {
+                    if (startX <= endX && startY <= endY) {
                         g.fillOval(startX, startY, endX - startX, endY - startY);
-                    } else if(startX >= endX && startY <= endY) {
+                    } else if (startX >= endX && startY <= endY) {
                         g.fillOval(endX, startY, startX - endX, endY - startY);
-                    } else if(startX <= endX && startY >= endY) {
+                    } else if (startX <= endX && startY >= endY) {
                         g.fillOval(startX, endY, endX - startX, startY - endY);
                     } else {
                         g.fillOval(endX, endY, startX - endX, startY - endY);
@@ -262,11 +262,11 @@ public class mainWindowController {
         });
 
         canvas.setOnMouseReleased(e -> {
-            if(currentTool.matches("pensil|brush|eraser|line|square|squareFilled|circle|circleFilled")) {
-                while(currentDrawing != drawings.size()-1) {
-                    drawings.remove(drawings.size()-1);
+            if (currentTool.matches("pensil|brush|eraser|line|square|squareFilled|circle|circleFilled")) {
+                while (currentDrawing != drawings.size() - 1) {
+                    drawings.remove(drawings.size() - 1);
                 }
-                
+
                 WritableImage currentImage = canvasToWritableImage(canvas);
                 drawings.add(currentImage);
 
@@ -279,11 +279,11 @@ public class mainWindowController {
                     case "square":
                         endX = e.getX();
                         endY = e.getY();
-                        if(startX <= endX && startY <= endY) {
+                        if (startX <= endX && startY <= endY) {
                             g.strokeRect(startX, startY, endX - startX, endY - startY);
-                        } else if(startX >= endX && startY <= endY) {
+                        } else if (startX >= endX && startY <= endY) {
                             g.strokeRect(endX, startY, startX - endX, endY - startY);
-                        } else if(startX <= endX && startY >= endY) {
+                        } else if (startX <= endX && startY >= endY) {
                             g.strokeRect(startX, endY, endX - startX, startY - endY);
                         } else {
                             g.strokeRect(endX, endY, startX - endX, startY - endY);
@@ -292,11 +292,11 @@ public class mainWindowController {
                     case "squareFilled":
                         endX = e.getX();
                         endY = e.getY();
-                        if(startX <= endX && startY <= endY) {
+                        if (startX <= endX && startY <= endY) {
                             g.fillRect(startX, startY, endX - startX, endY - startY);
-                        } else if(startX >= endX && startY <= endY) {
+                        } else if (startX >= endX && startY <= endY) {
                             g.fillRect(endX, startY, startX - endX, endY - startY);
-                        } else if(startX <= endX && startY >= endY) {
+                        } else if (startX <= endX && startY >= endY) {
                             g.fillRect(startX, endY, endX - startX, startY - endY);
                         } else {
                             g.fillRect(endX, endY, startX - endX, startY - endY);
@@ -305,11 +305,11 @@ public class mainWindowController {
                     case "circle":
                         endX = e.getX();
                         endY = e.getY();
-                        if(startX <= endX && startY <= endY) {
+                        if (startX <= endX && startY <= endY) {
                             g.strokeOval(startX, startY, endX - startX, endY - startY);
-                        } else if(startX >= endX && startY <= endY) {
+                        } else if (startX >= endX && startY <= endY) {
                             g.strokeOval(endX, startY, startX - endX, endY - startY);
-                        } else if(startX <= endX && startY >= endY) {
+                        } else if (startX <= endX && startY >= endY) {
                             g.strokeOval(startX, endY, endX - startX, startY - endY);
                         } else {
                             g.strokeOval(endX, endY, startX - endX, startY - endY);
@@ -318,11 +318,11 @@ public class mainWindowController {
                     case "circleFilled":
                         endX = e.getX();
                         endY = e.getY();
-                        if(startX <= endX && startY <= endY) {
+                        if (startX <= endX && startY <= endY) {
                             g.fillOval(startX, startY, endX - startX, endY - startY);
-                        } else if(startX >= endX && startY <= endY) {
+                        } else if (startX >= endX && startY <= endY) {
                             g.fillOval(endX, startY, startX - endX, endY - startY);
-                        } else if(startX <= endX && startY >= endY) {
+                        } else if (startX <= endX && startY >= endY) {
                             g.fillOval(startX, endY, endX - startX, startY - endY);
                         } else {
                             g.fillOval(endX, endY, startX - endX, startY - endY);
@@ -332,10 +332,10 @@ public class mainWindowController {
                         break;
                 }
 
-                if(drawings.size() > 10)
+                if (drawings.size() > 10)
                     drawings.remove(0);
-                
-                currentDrawing = drawings.size()-1;
+
+                currentDrawing = drawings.size() - 1;
             }
         });
     }
@@ -404,7 +404,7 @@ public class mainWindowController {
             newStage.initModality(Modality.APPLICATION_MODAL);
             newStage.setTitle("Creating new file!");
             newStage.setScene(new Scene(root));
-            newStage.setResizable(false); 
+            newStage.setResizable(false);
             newStage.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
@@ -477,12 +477,10 @@ public class mainWindowController {
         File file = fileChooser.showOpenDialog(newStage);
 
         if (file != null) {
-            
-                Image img = new Image(file.toURI().toString());
-                g.setFill(Color.WHITE);
-                g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                g.drawImage(img, 0, 0);
-            
+            Image img = new Image(file.toURI().toString());
+            g.setFill(Color.WHITE);
+            g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            g.drawImage(img, 0, 0);
         }
     }
 
@@ -498,7 +496,7 @@ public class mainWindowController {
 
     @FXML
     void redo(ActionEvent event) {
-        if(currentDrawing < drawings.size()-1) {
+        if (currentDrawing < drawings.size() - 1) {
             currentDrawing += 1;
             g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
             g.drawImage(drawings.get(currentDrawing), 0, 0);
@@ -521,9 +519,18 @@ public class mainWindowController {
         if (file != null) {
             try {
                 Image snapshot = canvas.snapshot(null, null);
-                BufferedImage awtImage = new BufferedImage((int)snapshot.getWidth(), (int)snapshot.getHeight(), BufferedImage.TYPE_INT_RGB);
+                BufferedImage awtImage = new BufferedImage((int) snapshot.getWidth(), (int) snapshot.getHeight(),
+                        BufferedImage.TYPE_INT_RGB);
                 String extension = fileChooser.getSelectedExtensionFilter().getExtensions().get(0).substring(2);
                 ImageIO.write(SwingFXUtils.fromFXImage(snapshot, awtImage), extension, file);
+
+                // saving test
+                if (file.exists() && !file.isDirectory()) {
+                    System.out.println("File \"" + file.getAbsolutePath() + "\" has been saved successfully!");
+                } else {
+                    System.out.println("File \"" + file.getAbsolutePath() + "\"  has been saved!");
+                }
+                ;
             } catch (IOException ex) {
                 System.out.println("Error saving image: " + ex.getMessage());
             }
@@ -532,7 +539,7 @@ public class mainWindowController {
 
     @FXML
     void undo(ActionEvent event) {
-        if(currentDrawing > 0) {
+        if (currentDrawing > 0) {
             currentDrawing -= 1;
             g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
             g.drawImage(drawings.get(currentDrawing), 0, 0);
